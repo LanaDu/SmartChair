@@ -97,6 +97,8 @@ void loop() {
   pinMode(7, INPUT);
   digitalWrite(8, LOW);
   pinMode(8, INPUT);
+  digitalWrite(9, LOW);
+  pinMode(9, INPUT);
   digitalWrite(10, LOW); 
   pinMode(10, INPUT);
   digitalWrite(11, LOW); 
@@ -134,6 +136,8 @@ void loop() {
   pinMode(7, INPUT);
   digitalWrite(8, LOW);
   pinMode(8, INPUT);
+  digitalWrite(9, LOW);
+  pinMode(9, INPUT);
   digitalWrite(10, LOW); 
   pinMode(10, INPUT);
   digitalWrite(11, LOW); 
@@ -157,6 +161,8 @@ void loop() {
   pinMode(7, INPUT);
   digitalWrite(8, LOW);
   pinMode(8, INPUT);
+  digitalWrite(9, LOW);
+  pinMode(9, INPUT);
   digitalWrite(10, LOW); 
   pinMode(10, INPUT);
   digitalWrite(11, LOW); 
