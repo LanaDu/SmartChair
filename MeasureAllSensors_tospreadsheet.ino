@@ -48,12 +48,8 @@ void measure(int pin, String pinno) {
     pinMode(3, OUTPUT); // C2 sheet a
     pinMode(4, OUTPUT); // R1 sheet a
     pinMode(5, OUTPUT); // R2 sheet a
-    //pinMode(6, OUTPUT); // C1 sheet c
-    //pinMode(7, OUTPUT); // C2 sheet c
-    
-    pinMode(12, OUTPUT); //CHANGE
-    pinMode(13, OUTPUT);
-    
+    pinMode(6, OUTPUT); // C1 sheet c
+    pinMode(7, OUTPUT); // C2 sheet c
     pinMode(8, OUTPUT); // C3 sheet c
     pinMode(9, OUTPUT); // R1 sheet c
     pinMode(10, OUTPUT); // R2 sheet c
@@ -68,11 +64,8 @@ void setup() {
   pinMode(3, OUTPUT); // C2
   pinMode(4, OUTPUT); // R1
   pinMode(5, OUTPUT); // R2
-  //pinMode(6, OUTPUT); // C1 sheet c
-  //pinMode(7, OUTPUT); // C2 sheet c CHANGED THIS PIN 
-  pinMode(12, OUTPUT); // C2 hard change
-  pinMode(13, OUTPUT);
-
+  pinMode(6, OUTPUT); // C1 sheet c
+  pinMode(7, OUTPUT); // C2 sheet 
   pinMode(8, OUTPUT); // C3 sheet c
   pinMode(9, OUTPUT); // R1 sheet c
   pinMode(10, OUTPUT); // R2 sheet c
@@ -100,14 +93,12 @@ void loop() {
   pinMode(5, INPUT);
   digitalWrite(6, LOW);
   pinMode(6, INPUT);
-//  digitalWrite(7, LOW); 
-//  pinMode(7, INPUT);
-
-  digitalWrite(12, LOW); 
-  pinMode(12, INPUT);
-  
+  digitalWrite(7, LOW); 
+  pinMode(7, INPUT);
   digitalWrite(8, LOW);
   pinMode(8, INPUT);
+  digitalWrite(9, LOW);
+  pinMode(9, INPUT); 
   digitalWrite(10, LOW); 
   pinMode(10, INPUT);
   digitalWrite(11, LOW); 
@@ -139,19 +130,14 @@ void loop() {
   pinMode(4, INPUT); 
   digitalWrite(3, LOW);
   pinMode(3, INPUT);
-//  digitalWrite(6, LOW);
-//  pinMode(6, INPUT);
-//  digitalWrite(7, LOW); 
-//  pinMode(7, INPUT);
-
-  digitalWrite(12, LOW); 
-  pinMode(12, INPUT);
-  digitalWrite(13, LOW);
-  pinMode(13, INPUT);
-
-  
+  digitalWrite(6, LOW);
+  pinMode(6, INPUT);
+  digitalWrite(7, LOW); 
+  pinMode(7, INPUT);
   digitalWrite(8, LOW);
   pinMode(8, INPUT);
+  digitalWrite(9, LOW);
+  pinMode(9, INPUT);
   digitalWrite(10, LOW); 
   pinMode(10, INPUT);
   digitalWrite(11, LOW); 
@@ -171,16 +157,12 @@ void loop() {
   pinMode(4, INPUT);
   digitalWrite(6, LOW);
   pinMode(6, INPUT);
-//  digitalWrite(7, LOW); 
-//  pinMode(7, INPUT);
-
-  digitalWrite(12, LOW); 
-  pinMode(12, INPUT);
-  digitalWrite(13, LOW);
-  pinMode(13, INPUT);
-  
+  digitalWrite(7, LOW); 
+  pinMode(7, INPUT);
   digitalWrite(8, LOW);
   pinMode(8, INPUT);
+  digitalWrite(9, LOW);
+  pinMode(9, INPUT);  
   digitalWrite(10, LOW); 
   pinMode(10, INPUT);
   digitalWrite(11, LOW); 
@@ -191,8 +173,7 @@ void loop() {
 
 // THREE BY THREE SENSOR SHEET
   // Measure 11 sheet C
-//  digitalWrite(6, HIGH); // C1 High
-  digitalWrite(13, HIGH); // C1 High
+  digitalWrite(6, HIGH); // C1 High
   digitalWrite(9, LOW); // R1 Low
 
   // open circuit C2, R2 & sheet A
@@ -204,12 +185,8 @@ void loop() {
   pinMode(4, INPUT);
   digitalWrite(5, LOW);
   pinMode(5, INPUT);
-//  digitalWrite(7, LOW); 
-//  pinMode(7, INPUT);
-
-  digitalWrite(12, LOW); 
-  pinMode(12, INPUT);
-  
+  digitalWrite(7, LOW); 
+  pinMode(7, INPUT);
   digitalWrite(8, LOW);
   pinMode(8, INPUT);
   digitalWrite(10, LOW); 
@@ -221,8 +198,7 @@ void loop() {
   delay(20);
 
  //Measure 12 sheet c
-  //digitalWrite(7, HIGH); // C2 High
-  digitalWrite(12, HIGH);
+  digitalWrite(7, HIGH); // C2 High
   digitalWrite(9, LOW); // R1 Low
 
   // open circuit C1, R2
@@ -236,9 +212,6 @@ void loop() {
   pinMode(5, INPUT);
   digitalWrite(6, LOW); 
   pinMode(6, INPUT);
-  
-  digitalWrite(13, LOW); 
-  pinMode(13, INPUT);
   digitalWrite(8, LOW);
   pinMode(8, INPUT);
   digitalWrite(10, LOW); 
@@ -262,17 +235,10 @@ void loop() {
   pinMode(4, INPUT);
   digitalWrite(5, LOW);
   pinMode(5, INPUT);
-//  digitalWrite(6, LOW); 
-//  pinMode(6, INPUT);
-
-  digitalWrite(13, LOW); 
-  pinMode(13, INPUT);
-//  digitalWrite(7, LOW);
-//  pinMode(7, INPUT);
-
-  digitalWrite(12, LOW);
-  pinMode(12, INPUT);
-  
+  digitalWrite(6, LOW); 
+  pinMode(6, INPUT);
+  digitalWrite(7, LOW);
+  pinMode(7, INPUT);
   digitalWrite(10, LOW); 
   pinMode(10, INPUT);
   digitalWrite(11, LOW); 
@@ -282,8 +248,7 @@ void loop() {
   delay(20);
 
 // Measure 2,1 sheet c
-//  digitalWrite(6, HIGH); // C1 High
-  digitalWrite(13, HIGH);
+  digitalWrite(6, HIGH); // C1 High
   digitalWrite(10, LOW); // R2 Low
 
   // open circuit C1, R1
@@ -295,12 +260,8 @@ void loop() {
   pinMode(4, INPUT);
   digitalWrite(5, LOW);
   pinMode(5, INPUT);
-//  digitalWrite(7, LOW); 
-//  pinMode(7, INPUT);
-
-  digitalWrite(12, LOW);
-  pinMode(12, INPUT);
-  
+  digitalWrite(7, LOW); 
+  pinMode(7, INPUT);
   digitalWrite(8, LOW);
   pinMode(8, INPUT);
   digitalWrite(9, LOW); 
@@ -312,8 +273,7 @@ void loop() {
   delay(20);
 
   // Measure 2,2 sheet c
-  //digitalWrite(7, HIGH); // C2 High
-  digitalWrite(12, HIGH); // C2 High
+  digitalWrite(7, HIGH); // C2 High
   digitalWrite(10, LOW); // R2 Low
 
   // open circuit C1, R1
@@ -325,11 +285,8 @@ void loop() {
   pinMode(4, INPUT);
   digitalWrite(5, LOW);
   pinMode(5, INPUT);
-//  digitalWrite(6, LOW); 
-//  pinMode(6, INPUT);
-
-  digitalWrite(13, LOW); 
-  pinMode(13, INPUT);
+  digitalWrite(6, LOW); 
+  pinMode(6, INPUT);
   digitalWrite(8, LOW);
   pinMode(8, INPUT);
   digitalWrite(9, LOW); 
@@ -353,17 +310,10 @@ void loop() {
   pinMode(4, INPUT);
   digitalWrite(5, LOW);
   pinMode(5, INPUT);
-//  digitalWrite(6, LOW); 
-//  pinMode(6, INPUT);
-
-    digitalWrite(13, LOW); 
-    pinMode(13, INPUT);
-//  digitalWrite(7, LOW);
-//  pinMode(7, INPUT);
-
-  digitalWrite(12, LOW);
-  pinMode(12, INPUT);
-  
+  digitalWrite(6, LOW); 
+  pinMode(6, INPUT);
+  digitalWrite(7, LOW);
+  pinMode(7, INPUT);
   digitalWrite(9, LOW); 
   pinMode(9, INPUT);
   digitalWrite(11, LOW); 
@@ -373,8 +323,7 @@ void loop() {
   delay(20);
   
   // Measure 3,1 sheet c
-//  digitalWrite(6, HIGH); // C3 High
-  digitalWrite(13, HIGH); // C3 High
+  digitalWrite(6, HIGH); // C3 High
   digitalWrite(11, LOW); // R2 Low
 
   // open circuit C1, R1
@@ -386,13 +335,8 @@ void loop() {
   pinMode(4, INPUT);
   digitalWrite(5, LOW);
   pinMode(5, INPUT);
-//  digitalWrite(7, LOW); 
-//  pinMode(7, INPUT);  
-  
-  digitalWrite(12, LOW); 
-  pinMode(12, INPUT);
-
-
+  digitalWrite(7, LOW); 
+  pinMode(7, INPUT);  
   digitalWrite(8, LOW);
   pinMode(8, INPUT);
   digitalWrite(9, LOW); 
@@ -403,8 +347,7 @@ void loop() {
   measure(A11, "A11");
 
   // Measure 3,2 sheet c
-  //digitalWrite(7, HIGH); // C2 High
-  digitalWrite(12, HIGH); // C2 High
+  digitalWrite(7, HIGH); // C2 High
   digitalWrite(11, LOW); // R3 Low
 
   // open circuit C1, R1
@@ -416,11 +359,8 @@ void loop() {
   pinMode(4, INPUT);
   digitalWrite(5, LOW);
   pinMode(5, INPUT);
-//  digitalWrite(6, LOW); 
-//  pinMode(6, INPUT);
-
-  digitalWrite(13, LOW); 
-  pinMode(13, INPUT);
+  digitalWrite(6, LOW); 
+  pinMode(6, INPUT);
   digitalWrite(8, LOW);
   pinMode(8, INPUT);
   digitalWrite(9, LOW); 
@@ -444,17 +384,10 @@ void loop() {
   pinMode(4, INPUT);
   digitalWrite(5, LOW);
   pinMode(5, INPUT);
-//  digitalWrite(6, LOW); 
-//  pinMode(6, INPUT);
-
-    digitalWrite(13, LOW); 
-    pinMode(13, INPUT);
-//  digitalWrite(7, LOW);
-//  pinMode(7, INPUT);
-
-  digitalWrite(12, LOW);
-  pinMode(12, INPUT);
-  
+  digitalWrite(6, LOW); 
+  pinMode(6, INPUT);
+  digitalWrite(7, LOW);
+  pinMode(7, INPUT);
   digitalWrite(9, LOW); 
   pinMode(9, INPUT);
   digitalWrite(10, LOW); 
