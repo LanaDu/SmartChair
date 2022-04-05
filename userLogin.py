@@ -1,6 +1,6 @@
 import tkinter
 from tkinter import *
-import TkGui
+
 #defining login function
 def login():
     #getting form data
@@ -9,12 +9,16 @@ def login():
     #applying empty validation
     if uname=='' or pwd=='':
         message.set("fill the empty field!!!")
-    else:
-      if uname=="Tony" and pwd=="p":
+        logMessage = False
+    elif uname=="Tony" and pwd=="p":
        message.set("Login success")
-       TkGui.main()
-      else:
+       logMessage = True
+    else:
        message.set("Wrong username or password!!!")
+       logMessage = False
+    return logMessage, uname
+
+
 #defining loginform function
 def Loginform():
     global login_screen
@@ -24,7 +28,7 @@ def Loginform():
     #setting height and width of screen
     login_screen.geometry("300x250")
     #declaring variable
-    global  message;
+    global  message
     global username
     global password
     username = StringVar()
@@ -45,6 +49,4 @@ def Loginform():
     #Login button
     Button(login_screen, text="Login", width=10, height=1, bg="orange",command=login).place(x=105,y=130)
     login_screen.mainloop()
-#calling function Loginform
 
-Loginform()
