@@ -3,28 +3,25 @@ import GUIFunc as fun
 from PIL import ImageTk, Image
 from string import ascii_letters
 import numpy as np
+from matplotlib.colors import ListedColormap
 import pandas as pd
 import seaborn as sb
 import tkinter as tk
 from datetime import datetime
 import time
+import sys
 import matplotlib.pyplot as plt
 import matplotlib.animation as animation
 from matplotlib import style
 from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
 from matplotlib.figure import Figure
 from matplotlib.animation import FuncAnimation
-now = datetime.now()
-time1 = ''
-countdownMins = 1860
-time_passed = -1  # -1 to initialize
-time_left = 1801  # 30 mins in seconds
 
-# def main(time1, countdownMins,time_left,time_passed):
+origTime = round(time.time())
+
 root = tk.Tk()
 root.title('Smart Chair UI')
 root.geometry('{}x{}'.format(460, 350))
-# import the functions file
 
 # create all of the main containers
 top_frame = tk.Frame(root, bg='light blue', width=450, height=50, pady=3)
@@ -42,12 +39,12 @@ btm_frame.grid(row=3, sticky="ew")
 # create the widgets for the top frame
 
 # hello user
-hello = tk.Label(top_frame, text="Hello "+" log out",
+hello = tk.Label(top_frame, text="Hello " + " log out",
                  bg="#334BFF", fg="white", width=20, height=10)
 hello.grid(row=0, column=0)
 
 # clock
-clock = tk.Label(top_frame, bg="#334BFF", fg="white", width=20, height=10)
+clock = tk.Label(top_frame,bg="#334BFF", fg="white", width=20, height=10)
 clock.grid(row=0, column=1)
 
 # menu
@@ -56,56 +53,36 @@ menu = tk.Label(top_frame, text="Menu", bg="#334BFF",
 menu.grid(row=0, column=2)
 
 # datedisp
-date = tk.Label(top_frame, text='Date: ' +
-                f"{now:%d %B %Y}", bg="#334BFF", fg="white",  height=10, width=20)
+date = tk.Label(top_frame, bg="#334BFF", fg="white", height=10, width=20)
 date.grid(row=0, column=3)
 
 # countdown
-countdown = tk.Label(top_frame, bg="#334BFF", fg="white", width=20,  height=10)
+countdown = tk.Label(top_frame,bg="#334BFF", fg="white", width=20, height=10)
 countdown.grid(row=0, column=4)
 
-# clock function
-# time1=''
 
-
-def tick(time1):
-
-    time2 = time.strftime('%H:%M:%S')
-    if time2 != time1:
-        time1 = time2
-        clock.config(text='Time: '+time2)
-        clock.after(200, tick)  # every 200 ms to stop it from being glitchy
-
-# countdown clock function
-# countdownMins=1860
-
-
-def countdownClock(countdownMins, time_left, time_passed):
-
-    if countdownMins > 0:
-        countdownMins = countdownMins-1
-        countdown.after(1000, countdownClock)  # every 1000ms = 1s
-        countdown.config(text='countdown: '+f"{countdownMins}")
-        time_passed = time_passed+1
-        time_left = time_left - 1
-        pie_chart(time_passed, time_left)
-    else:
+def tick():
+    now = datetime.now()
+    timeNow = round(time.time())- origTime
+    timeToGo = (30*60)-timeNow
+    countdown.configure(text='Time passed: ' + f"{timeNow}")
+    pie_chart(timeNow, timeToGo)
+    if timeNow==(30*60):
         tk.messagebox.showinfo("Stand up")
-        countdownMins = 1860
-        time_passed = -60
-        time_left = 1860
-        pie_chart(time_passed, time_left)
 
+
+    clock.configure(text='Time: '+ f"{now:%H:%M:%S}")
+    date.configure(text='Date: ' + f"{now:%d/%m/%Y}")
+    root.after(1000, tick)
 # pie chart function
 
-
-def pie_chart(time_passed, time_left):
+def pie_chart(time_pass, time_lef):
     chartLabels = ['time passed', 'time left']
-    chartVar = [time_passed, time_left]
+    chartVar = [time_pass, time_lef]
 
     fig = Figure()  # create a figure object
     ax = fig.add_subplot(111)  # add an Axes to the figure
-    ax.pie(chartVar, radius=1, labels=chartLabels,
+    ax.pie(chartVar, startangle =90,radius=1, labels=chartLabels,
            autopct='%0.2f%%', shadow=False)
     circle = plt.Circle((0, 0), 0.7, color='white')
     ax.add_artist(circle)
@@ -116,22 +93,31 @@ def pie_chart(time_passed, time_left):
 # heat map
 
 
-def create_HM(data):
+def create_HM(dataBot,dataTop):
+    #fig size is (rows, columns)
+    f, ax = plt.subplots(2,1, figsize=(6, 6))
+    hmTop = sb.heatmap(dataTop, cmap=ListedColormap(['green', 'orange', 'red']),ax=ax[0])
+    hmTop.set_xlabel('X-Axis', fontsize=10)
+    hmTop.set_ylabel('Y-Axis', fontsize=10)
 
-    f, ax = plt.subplots(figsize=(4, 6))
-    sb.heatmap(data)
-    # countdown.after(1000, data_HM())
+    hmBot=sb.heatmap(dataBot,cmap=ListedColormap(['green', 'orange', 'red']), ax=ax[1])
+    hmBot.set_xlabel('X-Axis', fontsize=10)
+    hmBot.set_ylabel('Y-Axis', fontsize=10)
     return f
 
 
-def data_HM():
-    data = np.random.rand(4, 6)
-    return data
+def data_hm():
+    inputs=[0.62, 0.34, 3.63, 0.47, 1.73, 1.43, 1.66, 1.89, 1.6, 1.93, 1.16, 0.85, 1.08]
+    dataBot = np.array([inputs[4], inputs[5], inputs[6], inputs[7], inputs[8], inputs[9], inputs[10], inputs[11], inputs[12]]).reshape(3,3)
+    dataTop = np.array([inputs[0], inputs[1], inputs[2], inputs[3]]).reshape(2,2)
+    return dataBot, dataTop
 
 
-data = data_HM()
+data = data_hm()
 # heat map
-fig_HM = create_HM(data)
+dataBot = data[0]
+dataTop = data[1]
+fig_HM = create_HM(dataBot, dataTop)
 heat_map = FigureCanvasTkAgg(fig_HM, center)
 heat_map.get_tk_widget().grid(row=1, column=1)  # A tk.DrawingArea.
 heat_map.draw()
@@ -145,7 +131,7 @@ badgeLabel = tk.Button(btm_frame, image=new_badge,
                        command=popUpPages.openBadge)
 badgeLabel.grid(row=3, column=0)
 
-# Create an object of tkinter ImageTk
+# Create an object of tkinter Imag                                                                          eTk
 report = Image.open("reportIcon.png")
 re_report = report.resize((50, 50), Image.ANTIALIAS)
 new_report = ImageTk.PhotoImage(re_report)
@@ -163,38 +149,5 @@ insightsLabel = tk.Button(btm_frame, image=new_insights,
                           command=popUpPages.openInsights)
 insightsLabel.grid(row=3, column=2)
 
-# call functions
-countdownClock(countdownMins, time_left, time_passed)
-tick(time1)
-
+tick()
 root.mainloop()
-
-#main(time1, countdownMins,time_left,time_passed)
-re_insights = insights.resize((50, 50), Image.ANTIALIAS)
-new_insights = ImageTk.PhotoImage(re_insights)
-# Create a Label Widget to display the text or Image
-insightsLabel = tk.Button(btm_frame, image=new_insights,
-                          command=popUpPages.openInsights)
-insightsLabel.grid(row=3, column=2)
-
-# call functions
-countdownClock(countdownMins, time_left, time_passed)
-tick(time1)
-
-root.mainloop()
-
-#main(time1, countdownMins,time_left,time_passed)
-re_insights = insights.resize((50, 50), Image.ANTIALIAS)
-new_insights = ImageTk.PhotoImage(re_insights)
-# Create a Label Widget to display the text or Image
-insightsLabel = tk.Button(btm_frame, image=new_insights,
-                          command=popUpPages.openInsights)
-insightsLabel.grid(row=3, column=2)
-
-# call functions
-countdownClock(countdownMins, time_left, time_passed)
-tick(time1)
-
-root.mainloop()
-
-#main(time1, countdownMins,time_left,time_passed)
