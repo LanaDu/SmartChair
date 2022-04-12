@@ -30,7 +30,7 @@ def main1():
     root.geometry('{}x{}'.format(width, height))
 
     # create all of the main containers
-    top_frame = tk.Frame(root, bg='light blue', width=width, height=50, pady=3)
+    top_frame = tk.Frame(root, bg="#334BFF", width=width, height=50, pady=3)
     center = tk.Frame(root, bg='white', width=width, height=40, padx=3, pady=3)
     btm_frame = tk.Frame(root, bg='white', width=width, height=45, pady=3)
 
@@ -54,24 +54,20 @@ def main1():
 
     # hello user
     hello = tk.Label(top_frame, text="Hello " + f"{uname}",
-                     bg="#334BFF", fg="white", width=50, height=10)
+                     bg="#334BFF", fg="white", width=40, height=5, font=10)
     hello.grid(row=0, column=0)
 
     # clock
-    clock = tk.Label(top_frame,bg="#334BFF", fg="white", width=50, height=10)
+    clock = tk.Label(top_frame,bg="#334BFF", fg="white", width=40, height=5, font=10)
     clock.grid(row=0, column=1)
 
-    # menu
-    menu = tk.Label(top_frame, text="Menu", bg="#334BFF",
-                    fg="white", width=50, height=10)
-    menu.grid(row=0, column=2)
 
     # datedisp
-    date = tk.Label(top_frame, bg="#334BFF", fg="white", height=10, width=50)
+    date = tk.Label(top_frame, bg="#334BFF", fg="white", height=5, width=40, font=10)
     date.grid(row=0, column=3)
 
     # countdown
-    countdown = tk.Label(top_frame,bg="#334BFF", fg="white", width=50, height=10)
+    countdown = tk.Label(top_frame,bg="#334BFF", fg="white", width=40, height=5, font=10)
     countdown.grid(row=0, column=4)
 
     def tick():
@@ -138,26 +134,26 @@ def main1():
     re_badge = badge.resize((50, 50), Image.ANTIALIAS)
     new_badge = ImageTk.PhotoImage(re_badge)
     # Create a Label Widget to display the text or Image
-    badgeLabel = tk.Button(btm_frame, image=new_badge,
+    badgeLabel = tk.Button(center, image=new_badge,
                            command=popUpPages.openBadge)
-    badgeLabel.grid(row=3, column=0)
+    badgeLabel.grid(row=1, column=7)
 
     # Create an object of tkinter Imag                                                                          eTk
     report = Image.open("reportIcon.png")
     re_report = report.resize((50, 50), Image.ANTIALIAS)
     new_report = ImageTk.PhotoImage(re_report)
     # Create a Label Widget to display the text or Image
-    reportLabel = tk.Button(btm_frame, image=new_report,
+    reportLabel = tk.Button(center, image=new_report,
                             command=popUpPages.openReport)
-    reportLabel.grid(row=3, column=1)
+    reportLabel.grid(row=1, column=6)
 
     # Create an object of tkinter ImageTk
     insights = Image.open("insightsIcon.png")
     re_insights = insights.resize((50, 50), Image.ANTIALIAS)
     new_insights = ImageTk.PhotoImage(re_insights)
     # Create a Label Widget to display the text or Image
-    insightsLabel = tk.Button(btm_frame, image=new_insights, command=popUpPages.openInsights)
-    insightsLabel.grid(row=3, column=2)
+    insightsLabel = tk.Button(center, image=new_insights, command=popUpPages.openInsights)
+    insightsLabel.grid(row=1, column=5)
     tick()
     root.mainloop()
 
