@@ -2,6 +2,7 @@ import pandas as pd
 import matlab.engine
 import mat73
 import scipy.io as sio
+import predictFamBT
 
 # dummy data
 dummy_path = r"C:\Users\conni\OneDrive\Documents\connie\Smart Chair\DummyData.xlsx"
