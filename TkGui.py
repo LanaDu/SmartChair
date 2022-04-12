@@ -1,13 +1,14 @@
 import popUpPages
-import userLogin as ul
 import GUIFunc as fun
-from PIL import ImageTk, Image
+from PIL import ImageTk
+from PIL import Image
 from string import ascii_letters
 import numpy as np
 from matplotlib.colors import ListedColormap
 import pandas as pd
 import seaborn as sb
 import tkinter as tk
+
 from datetime import datetime
 import time
 import sys
@@ -17,26 +18,21 @@ from matplotlib import style
 from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
 from matplotlib.figure import Figure
 from matplotlib.animation import FuncAnimation
-start = False
-messageLog = False
+global loggedIn
+ #note to self: cant use from tkinter import * AND PIL
 
-while not messageLog :
-    # login button
-    ul.Loginform()
-    log = ul.login()
-    if log[0] != messageLog:
-        messageLog = True
-        uname = log[1]
-while messageLog:
-    origTime = round(time.time())
+def main1():
+    uname = 'test'
     root = tk.Tk()
     root.title('Smart Chair UI')
-    root.geometry('{}x{}'.format(460, 350))
+    width = root.winfo_screenwidth()
+    height = root.winfo_screenheight()
+    root.geometry('{}x{}'.format(width, height))
 
     # create all of the main containers
-    top_frame = tk.Frame(root, bg='light blue', width=450, height=50, pady=3)
-    center = tk.Frame(root, bg='white', width=450, height=40, padx=3, pady=3)
-    btm_frame = tk.Frame(root, bg='white', width=450, height=45, pady=3)
+    top_frame = tk.Frame(root, bg='light blue', width=width, height=50, pady=3)
+    center = tk.Frame(root, bg='white', width=width, height=40, padx=3, pady=3)
+    btm_frame = tk.Frame(root, bg='white', width=width, height=45, pady=3)
 
     # layout all of the main containers
     root.grid_rowconfigure(1, weight=1)
@@ -46,35 +42,43 @@ while messageLog:
     center.grid(row=1, sticky="nsew")
     btm_frame.grid(row=3, sticky="ew")
 
+
+    #while loggedIn == 1:
+    #    LoginButton = tk.Button(top_frame, text='login', command=Loginform)
+    #    LoginButton.grid(row=0, column=0)
+
+    #while loggedIn==2:
+    origTime = round(time.time())
+
     # create the widgets for the top frame
 
     # hello user
     hello = tk.Label(top_frame, text="Hello " + f"{uname}",
-                     bg="#334BFF", fg="white", width=20, height=10)
+                     bg="#334BFF", fg="white", width=50, height=10)
     hello.grid(row=0, column=0)
 
     # clock
-    clock = tk.Label(top_frame,bg="#334BFF", fg="white", width=20, height=10)
+    clock = tk.Label(top_frame,bg="#334BFF", fg="white", width=50, height=10)
     clock.grid(row=0, column=1)
 
     # menu
     menu = tk.Label(top_frame, text="Menu", bg="#334BFF",
-                    fg="white", width=20, height=10)
+                    fg="white", width=50, height=10)
     menu.grid(row=0, column=2)
 
     # datedisp
-    date = tk.Label(top_frame, bg="#334BFF", fg="white", height=10, width=20)
+    date = tk.Label(top_frame, bg="#334BFF", fg="white", height=10, width=50)
     date.grid(row=0, column=3)
 
     # countdown
-    countdown = tk.Label(top_frame,bg="#334BFF", fg="white", width=20, height=10)
+    countdown = tk.Label(top_frame,bg="#334BFF", fg="white", width=50, height=10)
     countdown.grid(row=0, column=4)
 
     def tick():
         now = datetime.now()
         timeNow = round(time.time())- origTime
         timeToGo = (30*60)-timeNow
-        countdown.configure(text='Time passed: ' + f"{timeNow}")
+        countdown.configure(text='Time passed: ' + f"{timeNow//60}" + " minutes and " + f"{timeNow%60}" + " seconds")
         pie_chart(timeNow, timeToGo)
         if timeNow==(30*60):
             tk.messagebox.showinfo("Stand up")
@@ -91,11 +95,10 @@ while messageLog:
 
         fig = Figure()  # create a figure object
         ax = fig.add_subplot(111)  # add an Axes to the figure
-        ax.pie(chartVar, startangle =90,radius=1, labels=chartLabels,
-               autopct='%0.2f%%', shadow=False)
+        ax.pie(chartVar, startangle =90,radius=1, shadow=False, colors = ['white', 'blue'])
         circle = plt.Circle((0, 0), 0.7, color='white')
         ax.add_artist(circle)
-        plt.show()
+        ax.set_title('Stand when the blue donut disappears')
         chart1 = FigureCanvasTkAgg(fig, center)
         chart1.get_tk_widget().grid(row=1, column=3)
 
@@ -104,14 +107,13 @@ while messageLog:
 
     def create_HM(dataBot,dataTop):
         #fig size is (rows, columns)
-        f, ax = plt.subplots(2,1, figsize=(6, 6))
-        hmTop = sb.heatmap(dataTop, cmap=ListedColormap(['green', 'orange', 'red']),ax=ax[0])
-        hmTop.set_xlabel('X-Axis', fontsize=10)
-        hmTop.set_ylabel('Y-Axis', fontsize=10)
-
-        hmBot=sb.heatmap(dataBot,cmap=ListedColormap(['green', 'orange', 'red']), ax=ax[1])
-        hmBot.set_xlabel('X-Axis', fontsize=10)
-        hmBot.set_ylabel('Y-Axis', fontsize=10)
+        f, ax = plt.subplots(2,1, figsize=(4, 4))
+        TopLabels = np.array([['A1', 'A2'],['A3', 'A4']])
+        hmTop = sb.heatmap(dataTop, cmap=ListedColormap(['green', 'orange', 'red']),ax=ax[0], annot= TopLabels, fmt='')
+        BotLabels =np.array([['A5', 'A6', 'A7'],['A8', 'A9','A10'],['A11', 'A12','A13']])
+        hmBot=sb.heatmap(dataBot, cmap=ListedColormap(['green', 'orange', 'red']), ax=ax[1], annot= BotLabels, fmt='')
+        hmBot.set_xlabel('Front of Chair', fontsize=10)
+        hmTop.set_ylabel('Right hand side', fontsize=10)
         return f
 
 
@@ -154,9 +156,61 @@ while messageLog:
     re_insights = insights.resize((50, 50), Image.ANTIALIAS)
     new_insights = ImageTk.PhotoImage(re_insights)
     # Create a Label Widget to display the text or Image
-    insightsLabel = tk.Button(btm_frame, image=new_insights,
-                              command=popUpPages.openInsights)
+    insightsLabel = tk.Button(btm_frame, image=new_insights, command=popUpPages.openInsights)
     insightsLabel.grid(row=3, column=2)
-
     tick()
     root.mainloop()
+
+
+
+# defining login function
+def login():
+    # getting form data
+    uname = username.get()
+    pwd = password.get()
+    # applying empty validation
+    if uname == '' or pwd == '':
+        message.set("fill the empty field!!!")
+
+    elif uname == "Tony" and pwd == "p":
+        message.set("Login success")
+        global loggedIn
+        loggedIn = 2
+        print("hi")
+
+    else:
+        message.set("Wrong username or password!!!")
+
+
+# defining loginform function
+def Loginform():
+    #global login_screen
+    login_screen = tk.Toplevel()
+    # Setting title of screen
+    login_screen.title("Login Form")
+    # setting height and width of screen
+    login_screen.geometry("300x250")
+    # declaring variable
+    global message
+    global username
+    global password
+    username = tk.StringVar()
+    password = tk.StringVar()
+    message = tk.StringVar()
+    # Creating layout of login form
+    tk.Label(login_screen, width="300", text="Please enter details below", bg="orange", fg="white").pack()
+    # Username Label
+    tk.Label(login_screen, text="Username * ").place(x=20, y=40)
+    # Username textbox
+    tk.Entry(login_screen, textvariable=username).place(x=90, y=42)
+    # Password Label
+    tk.Label(login_screen, text="Password * ").place(x=20, y=80)
+    # Password textbox
+    tk.Entry(login_screen, textvariable=password, show="*").place(x=90, y=82)
+    # Label for displaying login status[success/failed]
+    tk.Label(login_screen, text="", textvariable=message).place(x=95, y=100)
+    # Login button
+    tk.Button(login_screen, text="Login", width=10, height=1, bg="orange", command=login).place(x=105, y=130)
+    #login_screen.mainloop()
+
+main1()
