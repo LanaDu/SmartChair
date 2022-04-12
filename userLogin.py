@@ -12,7 +12,7 @@ def login():
 
     elif uname=="Tony" and pwd=="p":
        message.set("Login success")
-       main1()
+
     else:
        message.set("Wrong username or password!!!")
 

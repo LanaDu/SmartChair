@@ -74,13 +74,13 @@ def main1():
         now = datetime.now()
         timeNow = round(time.time())- origTime
         timeToGo = (30*60)-timeNow
-        countdown.configure(text='Time passed: ' + f"{timeNow//60}" + " minutes and " + f"{timeNow%60}" + " seconds")
+        countdown.configure(text='Time sat down: ' + f"{timeNow//60}" + " minutes and " + f"{timeNow%60}" + " seconds")
         pie_chart(timeNow, timeToGo)
         if timeNow==(30*60):
             tk.messagebox.showinfo("Stand up")
 
 
-        clock.configure(text='Time: '+ f"{now:%H:%M:%S}")
+        clock.configure(text='Time: '+ f"{now:%H:%M}")
         date.configure(text='Date: ' + f"{now:%d/%m/%Y}")
         root.after(1000, tick)
     # pie chart function
@@ -105,9 +105,9 @@ def main1():
         #fig size is (rows, columns)
         f, ax = plt.subplots(2,1, figsize=(4, 4))
         TopLabels = np.array([['A1', 'A2'],['A3', 'A4']])
-        hmTop = sb.heatmap(dataTop, cmap=ListedColormap(['green', 'orange', 'red']),ax=ax[0], annot= TopLabels, fmt='')
+        hmTop = sb.heatmap(dataTop, cmap=ListedColormap(['green', 'orange', 'red']),ax=ax[0], annot= TopLabels, fmt='', yticklabels=False, xticklabels=False)
         BotLabels =np.array([['A5', 'A6', 'A7'],['A8', 'A9','A10'],['A11', 'A12','A13']])
-        hmBot=sb.heatmap(dataBot, cmap=ListedColormap(['green', 'orange', 'red']), ax=ax[1], annot= BotLabels, fmt='')
+        hmBot=sb.heatmap(dataBot, cmap=ListedColormap(['green', 'orange', 'red']), ax=ax[1], annot= BotLabels, fmt='', yticklabels=False, xticklabels=False)
         hmBot.set_xlabel('Front of Chair', fontsize=10)
         hmTop.set_ylabel('Right hand side', fontsize=10)
         return f
