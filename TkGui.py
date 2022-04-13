@@ -19,10 +19,13 @@ from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
 from matplotlib.figure import Figure
 from matplotlib.animation import FuncAnimation
 global loggedIn
+global uname
+global oTime
  #note to self: cant use from tkinter import * AND PIL
 
 def main1():
-    uname = 'test'
+    global uname
+    uname='log in please'
     root = tk.Tk()
     root.title('Smart Chair UI')
     width = root.winfo_screenwidth()
@@ -47,42 +50,55 @@ def main1():
     #    LoginButton = tk.Button(top_frame, text='login', command=Loginform)
     #    LoginButton.grid(row=0, column=0)
 
-    #while loggedIn==2:
-    origTime = round(time.time())
-
     # create the widgets for the top frame
 
     # hello user
-    hello = tk.Label(top_frame, text="Hello " + f"{uname}",
-                     bg="#334BFF", fg="white", width=40, height=5, font=10)
+    hello = tk.Label(top_frame,
+                     bg="#334BFF", fg="white", width=35, height=5, font=10)
     hello.grid(row=0, column=0)
 
     # clock
-    clock = tk.Label(top_frame,bg="#334BFF", fg="white", width=40, height=5, font=10)
+    clock = tk.Label(top_frame,bg="#334BFF", fg="white", width=35, height=5, font=10)
     clock.grid(row=0, column=1)
 
 
     # datedisp
-    date = tk.Label(top_frame, bg="#334BFF", fg="white", height=5, width=40, font=10)
+    date = tk.Label(top_frame, bg="#334BFF", fg="white", height=5, width=35, font=10)
     date.grid(row=0, column=3)
 
     # countdown
-    countdown = tk.Label(top_frame,bg="#334BFF", fg="white", width=40, height=5, font=10)
+    countdown = tk.Label(top_frame,bg="#334BFF", fg="white", width=35, height=5, font=10)
     countdown.grid(row=0, column=4)
+
+    # login
+    loginButton = tk.Button(top_frame,bg="#334BFF", fg="white", width=35, height=5, font=10)
+    loginButton.grid(row=0, column=5)
 
     def tick():
         now = datetime.now()
-        timeNow = round(time.time())- origTime
-        timeToGo = (30*60)-timeNow
-        countdown.configure(text='Time sat down: ' + f"{timeNow//60}" + " minutes and " + f"{timeNow%60}" + " seconds")
-        pie_chart(timeNow, timeToGo)
-        if timeNow==(30*60):
-            tk.messagebox.showinfo("Stand up")
+        if uname == "Tony":
 
+            global oTime
+            timeNow = round(time.time())- oTime
+            timeToGo = (30*60)-timeNow
+            countdown.configure(text='Time sat down: ' + f"{timeNow//60}" + " minutes and " + f"{timeNow%60}" + " seconds")
+            hello.configure(text='Hello, '+ f"{uname}")
+            pie_chart(timeNow, timeToGo)
+            if timeNow==(30*60):
+                tk.messagebox.showinfo("Stand up")
 
-        clock.configure(text='Time: '+ f"{now:%H:%M}")
-        date.configure(text='Date: ' + f"{now:%d/%m/%Y}")
-        root.after(1000, tick)
+            countdown.configure(text='Time sat down: ' + f"{timeNow//60}" + " minutes and " + f"{timeNow%60}" + " seconds")
+            clock.configure(text='Time: '+ f"{now:%H:%M}")
+            date.configure(text='Date: ' + f"{now:%d/%m/%Y}")
+            loginButton.configure(text='log out', command=logout)
+            root.after(1000, tick)
+        else:
+            countdown.configure(text='Time sat down: 0 minutes and 0 seconds')
+            clock.configure(text='Time: '+ f"{now:%H:%M}")
+            date.configure(text='Date: ' + f"{now:%d/%m/%Y}")
+            hello.configure(text='Please log in')
+            loginButton.configure(text = 'log in', command = Loginform)
+            root.after(1000,tick)
     # pie chart function
 
     def pie_chart(time_pass, time_lef):
@@ -157,11 +173,14 @@ def main1():
     tick()
     root.mainloop()
 
-
+def logout():
+    global uname
+    uname ='logged out'
 
 # defining login function
 def login():
     # getting form data
+    global uname
     uname = username.get()
     pwd = password.get()
     # applying empty validation
@@ -170,9 +189,10 @@ def login():
 
     elif uname == "Tony" and pwd == "p":
         message.set("Login success")
+        global oTime
+        oTime = round(time.time())
         global loggedIn
-        loggedIn = 2
-        print("hi")
+
 
     else:
         message.set("Wrong username or password!!!")
@@ -182,6 +202,7 @@ def login():
 def Loginform():
     #global login_screen
     login_screen = tk.Toplevel()
+    login_screen.grab_set()
     # Setting title of screen
     login_screen.title("Login Form")
     # setting height and width of screen
