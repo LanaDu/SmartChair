@@ -1,6 +1,12 @@
-import serial
-import time
+from __future__ import print_function
 import pandas as pd
+import predictFamBT
+import matlab
+import serial
+import numpy as np
+import matplotlib.pyplot as plt
+import seaborn as sb
+from matplotlib.colors import ListedColormap
 
 def read_arduino(arduino):
     arduino_bytes = arduino.readline() # read line of arduino serial
@@ -16,8 +22,9 @@ vals = []
 #initialise dataframe for storage of data
 all_sensors = pd.DataFrame(columns = ['Sensor', 'Value'])
 
-while True:
-    arduino = serial.Serial('COM5', 9600) # read com5 (could also be com4)
+loop = 0
+while loop != 5:
+    arduino = serial.Serial('COM4', 9600) # open com port (com4 or com5)
     sensor, val = read_arduino(arduino)
     if sensor == 'A1': #get 13 sensor values
         count = 1
@@ -31,14 +38,21 @@ while True:
         # now have list of sensors and list of vals to put in dataframe
         sensors13 = pd.DataFrame(list(zip(sensors, vals)), columns = ['Sensor', 'Value'])
         all_sensors = all_sensors.append(sensors13)
+        my_predictFamBT = predictFamBT.initialize()
+
+        sensorDataIn = matlab.double(vals, size=(1, 13))
+        labelOut = my_predictFamBT.predictFamBT(sensorDataIn)
+        print(labelOut, sep='\n')
+
+        my_predictFamBT.terminate()
+
         sensors = []
         vals = []
-
-        #ml
-        #ui
-
+        loop += 1
     else:
         sensor, val = read_arduino(arduino)
     arduino.close()
 
+
 # excel export at log out stage
+print(all_sensors)
