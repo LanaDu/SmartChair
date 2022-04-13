@@ -14,7 +14,7 @@ def openBadge():
     topFrame = tk.Frame(badgePage)
     tk.Label(topFrame, text ="1/5 badges achieved:").grid(column = 0, row =1)
     #Create an object of tkinter ImageTk
-    badge = Image.open("../../badgeIcon.jpg")
+    badge = Image.open("badgeIcon.jpg")
     re_badge = badge.resize((50, 50), Image.ANTIALIAS)
     new_badge = ImageTk.PhotoImage(re_badge)
     # Create a Label Widget to display the text or Image

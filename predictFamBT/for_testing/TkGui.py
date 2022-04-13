@@ -146,7 +146,7 @@ def main1():
     heat_map.draw()
 
     # Create an object of tkinter ImageTk
-    badge = Image.open("../../badgeIcon.jpg")
+    badge = Image.open("badgeIcon.jpg")
     re_badge = badge.resize((50, 50), Image.ANTIALIAS)
     new_badge = ImageTk.PhotoImage(re_badge)
     # Create a Label Widget to display the text or Image
@@ -155,7 +155,7 @@ def main1():
     badgeLabel.grid(row=1, column=7)
 
     # Create an object of tkinter Imag                                                                          eTk
-    report = Image.open("../../reportIcon.png")
+    report = Image.open("reportIcon.png")
     re_report = report.resize((50, 50), Image.ANTIALIAS)
     new_report = ImageTk.PhotoImage(re_report)
     # Create a Label Widget to display the text or Image
@@ -164,7 +164,7 @@ def main1():
     reportLabel.grid(row=1, column=6)
 
     # Create an object of tkinter ImageTk
-    insights = Image.open("../../insightsIcon.png")
+    insights = Image.open("insightsIcon.png")
     re_insights = insights.resize((50, 50), Image.ANTIALIAS)
     new_insights = ImageTk.PhotoImage(re_insights)
     # Create a Label Widget to display the text or Image
