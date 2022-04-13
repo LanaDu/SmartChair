@@ -1,22 +1,15 @@
-import popUpPages
-import GUIFunc as fun
+from SmartChair.predictFamBT.for_testing import popUpPages
 from PIL import ImageTk, Image
-from string import ascii_letters
 import numpy as np
 from matplotlib.colors import ListedColormap
-import pandas as pd
 import seaborn as sb
 import tkinter as tk
 from tkinter import *
 from datetime import datetime
 import time
-import sys
 import matplotlib.pyplot as plt
-import matplotlib.animation as animation
-from matplotlib import style
 from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
 from matplotlib.figure import Figure
-from matplotlib.animation import FuncAnimation
 
 loggedIn = True
 
@@ -130,7 +123,7 @@ def main1():
     heat_map.draw()
 
     # Create an object of tkinter ImageTk
-    badge = Image.open("badgeIcon.jpg")
+    badge = Image.open("predictFamBT/for_testing/badgeIcon.jpg")
     re_badge = badge.resize((50, 50), Image.ANTIALIAS)
     new_badge = ImageTk.PhotoImage(re_badge)
     # Create a Label Widget to display the text or Image
@@ -139,7 +132,7 @@ def main1():
     badgeLabel.grid(row=3, column=0)
 
     # Create an object of tkinter Imag                                                                          eTk
-    report = Image.open("reportIcon.png")
+    report = Image.open("predictFamBT/for_testing/reportIcon.png")
     re_report = report.resize((50, 50), Image.ANTIALIAS)
     new_report = ImageTk.PhotoImage(re_report)
     # Create a Label Widget to display the text or Image
@@ -148,7 +141,7 @@ def main1():
     reportLabel.grid(row=3, column=1)
 
     # Create an object of tkinter ImageTk
-    insights = Image.open("insightsIcon.png")
+    insights = Image.open("predictFamBT/for_testing/insightsIcon.png")
     re_insights = insights.resize((50, 50), Image.ANTIALIAS)
     new_insights = ImageTk.PhotoImage(re_insights)
     # Create a Label Widget to display the text or Image
