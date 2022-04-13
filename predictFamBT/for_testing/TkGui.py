@@ -1,11 +1,17 @@
+from __future__ import print_function
+import pandas as pd
+import predictFamBT
+import matlab
+import serial
 import popUpPages
 from PIL import ImageTk
 from PIL import Image
+import ArduinoPython
 import numpy as np
 from matplotlib.colors import ListedColormap
 import seaborn as sb
 import tkinter as tk
-
+from numpy import random
 from datetime import datetime
 import time
 import matplotlib.pyplot as plt
@@ -15,16 +21,37 @@ from matplotlib.figure import Figure
 global loggedIn
 global uname
 global oTime
+global ab
+#inputs=[0.62, 0.34, 3.63, 0.47, 1.73, 1.43, 1.66, 1.89, 1.6, 1.93, 1.16, 0.85, 1.08]
  #note to self: cant use from tkinter import * AND PIL
 
 def main1():
+
+    def read_arduino(arduino):
+        arduino_bytes = arduino.readline()  # read line of arduino serial
+        arduino_decode = arduino_bytes.decode()
+        [s, v] = arduino_decode.split(',')  # isolate sensor name and voltage val
+        v = float(v)
+
+        return s, v
+
     global uname
     uname='log in please'
+
+    global ab
+    ab = 2
+
     root = tk.Tk()
     root.title('Smart Chair UI')
     width = root.winfo_screenwidth()
     height = root.winfo_screenheight()
     root.geometry('{}x{}'.format(width, height))
+
+
+    def abort():
+        global ab
+        ab = 3
+
 
     # create all of the main containers
     top_frame = tk.Frame(root, bg="#334BFF", width=width, height=50, pady=3)
@@ -65,9 +92,11 @@ def main1():
     countdown.grid(row=0, column=4)
 
     # login
-    loginButton = tk.Button(top_frame,bg="#334BFF", fg="white", width=35, height=5, font=10)
+    loginButton = tk.Button(top_frame,bg="#334BFF", fg="white", width=15, height=5, font=10)
     loginButton.grid(row=0, column=5)
-
+    #abort arduino
+    abortButton = tk.Button(top_frame,bg="#334BFF", fg="white", width=15, height=5, font=10, command = abort, text='abort')
+    abortButton.grid(row=0, column=6)
     def tick():
         now = datetime.now()
         if uname == "Tony":
@@ -111,8 +140,11 @@ def main1():
     # heat map
 
 
+
+
     def create_HM(dataBot,dataTop):
         #fig size is (rows, columns)
+        plt.close()
         f, ax = plt.subplots(2,1, figsize=(4, 4))
         TopLabels = np.array([['A1', 'A2'],['A3', 'A4']])
         hmTop = sb.heatmap(dataTop, cmap=ListedColormap(['green', 'orange', 'red']),ax=ax[0], annot= TopLabels, fmt='', yticklabels=False, xticklabels=False)
@@ -123,47 +155,59 @@ def main1():
         return f
 
 
-    def data_hm():
-        inputs=[0.62, 0.34, 3.63, 0.47, 1.73, 1.43, 1.66, 1.89, 1.6, 1.93, 1.16, 0.85, 1.08]
+    def data_hm(inputs):
+        #inputs=[0.62, 0.34, 3.63, 0.47, 1.73, 1.43, 1.66, 1.89, 1.6, 1.93, 1.16, 0.85, 1.08]
         dataBot = np.array([inputs[4], inputs[5], inputs[6], inputs[7], inputs[8], inputs[9], inputs[10], inputs[11], inputs[12]]).reshape(3,3)
         dataTop = np.array([inputs[0], inputs[1], inputs[2], inputs[3]]).reshape(2,2)
+        print(dataTop)
+        print(dataBot)
         return dataBot, dataTop
 
 
-    data = data_hm()
-    # heat map
-    dataBot = data[0]
-    dataTop = data[1]
-    fig_HM = create_HM(dataBot, dataTop)
-    heat_map = FigureCanvasTkAgg(fig_HM, center)
-    heat_map.get_tk_widget().grid(row=1, column=1)  # A tk.DrawingArea.
-    heat_map.draw()
+    def call_HM():
+        global ab
+        if ab == 2:
+            inputs= random.randint(5, size=(13))
+            read_arduino(arduino)
 
+        elif ab==3:
+            inputs = np.zeros(13)
+
+        data = data_hm(inputs)
+        # heat map
+        dataBot = data[0]
+        dataTop = data[1]
+        fig_HM = create_HM(dataBot, dataTop)
+        heat_map = FigureCanvasTkAgg(fig_HM, center)
+        heat_map.get_tk_widget().grid(row=1, column=1)  # A tk.DrawingArea.
+        heat_map.draw()
+        root.after(20000, call_HM)
+    call_HM()
     # Create an object of tkinter ImageTk
-    badge = Image.open("badgeIcon.jpg")
-    re_badge = badge.resize((50, 50), Image.ANTIALIAS)
-    new_badge = ImageTk.PhotoImage(re_badge)
-    # Create a Label Widget to display the text or Image
-    badgeLabel = tk.Button(center, image=new_badge,
-                           command=popUpPages.openBadge)
-    badgeLabel.grid(row=1, column=7)
-
-    # Create an object of tkinter Imag                                                                          eTk
-    report = Image.open("reportIcon.png")
-    re_report = report.resize((50, 50), Image.ANTIALIAS)
-    new_report = ImageTk.PhotoImage(re_report)
-    # Create a Label Widget to display the text or Image
-    reportLabel = tk.Button(center, image=new_report,
-                            command=popUpPages.openReport)
-    reportLabel.grid(row=1, column=6)
-
-    # Create an object of tkinter ImageTk
-    insights = Image.open("insightsIcon.png")
-    re_insights = insights.resize((50, 50), Image.ANTIALIAS)
-    new_insights = ImageTk.PhotoImage(re_insights)
-    # Create a Label Widget to display the text or Image
-    insightsLabel = tk.Button(center, image=new_insights, command=popUpPages.openInsights)
-    insightsLabel.grid(row=1, column=5)
+    # badge = Image.open("badgeIcon.jpg")
+    # re_badge = badge.resize((50, 50), Image.ANTIALIAS)
+    # new_badge = ImageTk.PhotoImage(re_badge)
+    # # Create a Label Widget to display the text or Image
+    # badgeLabel = tk.Button(center, image=new_badge,
+    #                        command=popUpPages.openBadge)
+    # badgeLabel.grid(row=1, column=7)
+    #
+    # # Create an object of tkinter Imag                                                                          eTk
+    # report = Image.open("reportIcon.png")
+    # re_report = report.resize((50, 50), Image.ANTIALIAS)
+    # new_report = ImageTk.PhotoImage(re_report)
+    # # Create a Label Widget to display the text or Image
+    # reportLabel = tk.Button(center, image=new_report,
+    #                         command=popUpPages.openReport)
+    # reportLabel.grid(row=1, column=6)
+    #
+    # # Create an object of tkinter ImageTk
+    # insights = Image.open("insightsIcon.png")
+    # re_insights = insights.resize((50, 50), Image.ANTIALIAS)
+    # new_insights = ImageTk.PhotoImage(re_insights)
+    # # Create a Label Widget to display the text or Image
+    # insightsLabel = tk.Button(center, image=new_insights, command=popUpPages.openInsights)
+    # insightsLabel.grid(row=1, column=5)
     tick()
     root.mainloop()
 
