@@ -9,14 +9,14 @@ def login():
     #applying empty validation
     if uname=='' or pwd=='':
         message.set("fill the empty field!!!")
-        logMessage = False
+
     elif uname=="Tony" and pwd=="p":
        message.set("Login success")
-       logMessage = True
+
     else:
        message.set("Wrong username or password!!!")
-       logMessage = False
-    return logMessage, uname
+
+
 
 
 #defining loginform function
@@ -50,3 +50,4 @@ def Loginform():
     Button(login_screen, text="Login", width=10, height=1, bg="orange",command=login).place(x=105,y=130)
     login_screen.mainloop()
 
+Loginform()
