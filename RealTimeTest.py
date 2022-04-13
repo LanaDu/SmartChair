@@ -1,22 +1,15 @@
-import popUpPages
-import GUIFunc as fun
+from SmartChair.predictFamBT.for_testing import popUpPages
 from PIL import ImageTk, Image
-from string import ascii_letters
 import numpy as np
 from matplotlib.colors import ListedColormap
-import pandas as pd
 import seaborn as sb
 import tkinter as tk
 from tkinter import *
 from datetime import datetime
 import time
-import sys
 import matplotlib.pyplot as plt
-import matplotlib.animation as animation
-from matplotlib import style
 from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
 from matplotlib.figure import Figure
-from matplotlib.animation import FuncAnimation
 
 loggedIn = True
 
