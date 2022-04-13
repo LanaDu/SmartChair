@@ -6,7 +6,6 @@ import serial
 import popUpPages
 from PIL import ImageTk
 from PIL import Image
-import ArduinoPython
 import numpy as np
 from matplotlib.colors import ListedColormap
 import seaborn as sb
