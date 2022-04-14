@@ -2,7 +2,6 @@ from __future__ import print_function
 import pandas as pd
 import predictFamBT
 import matlab
-import serial
 import popUpPages
 from PIL import ImageTk
 from PIL import Image
@@ -16,6 +15,7 @@ import time
 import matplotlib.pyplot as plt
 from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
 from matplotlib.figure import Figure
+import serial
 
 global loggedIn
 global uname
@@ -25,7 +25,6 @@ global ab
  #note to self: cant use from tkinter import * AND PIL
 
 def main1():
-
     def read_arduino(arduino):
         arduino_bytes = arduino.readline()  # read line of arduino serial
         arduino_decode = arduino_bytes.decode()
@@ -43,7 +42,9 @@ def main1():
     root = tk.Tk()
     root.title('Smart Chair UI')
     width = root.winfo_screenwidth()
+    print(width)
     height = root.winfo_screenheight()
+    print(height)
     root.geometry('{}x{}'.format(width, height))
 
 
@@ -165,14 +166,39 @@ def main1():
 
     def call_HM():
         global ab
+        arduino = serial.Serial('COM4', 9600)  # open com port (com4 or com5)
         if ab == 2:
-            inputs= random.randint(5, size=(13))
-            read_arduino(arduino)
+            count = 1
+            #vals= random.randint(5, size=(13))
+            sensors, vals = [], []
+            while count < 14:
+                sensor, val = read_arduino(arduino)
+                print(sensor)
+                print(' A' +f"{count}")
+                if sensor == ' A' +f"{count}":
+                    #sensor, val = read_arduino(arduino)
+                    sensors.append(sensor)
+                    vals.append(val)
+                    count += 1
+                # now have list of sensors and list of vals to put in dataframe
+                # sensors13 = pd.DataFrame(list(zip(sensors, vals)), columns=['Sensor', 'Value'])
+                # all_sensors = all_sensors.append(sensors13)
 
-        elif ab==3:
-            inputs = np.zeros(13)
+            my_predictFamBT = predictFamBT.initialize()
 
-        data = data_hm(inputs)
+            sensorDataIn = matlab.double(vals, size=(1, 13))
+            labelOut = my_predictFamBT.predictFamBT(sensorDataIn)
+            print(labelOut, sep='\n')
+
+            my_predictFamBT.terminate()
+            arduino.close()
+
+        elif ab==3: #abort
+            vals = np.zeros(13)
+            print(vals)
+            arduino.close()
+
+        data = data_hm(vals)
         # heat map
         dataBot = data[0]
         dataTop = data[1]
