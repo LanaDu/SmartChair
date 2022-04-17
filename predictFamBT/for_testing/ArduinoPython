@@ -1,6 +1,6 @@
 from __future__ import print_function
 import pandas as pd
-import predictFamBT
+#import predictFamBT
 import matlab
 import serial
 import openpyxl
@@ -44,13 +44,13 @@ while loop != 5:
         sensors13 = pd.DataFrame(list(zip(sensors, vals)), columns = ['Sensor', 'Value'])
         all_sensors = all_sensors.append(sensors13)
 
-        my_predictFamBT = predictFamBT.initialize()
+        #my_predictFamBT = predictFamBT.initialize()
 
-        sensorDataIn = matlab.double(vals, size=(1, 13))
-        labelOut = my_predictFamBT.predictFamBT(sensorDataIn)
-        print(labelOut, sep='\n')
+        #sensorDataIn = matlab.double(vals, size=(1, 13))
+        #labelOut = my_predictFamBT.predictFamBT(sensorDataIn)
+        #print(labelOut, sep='\n')
 
-        my_predictFamBT.terminate()
+        #my_predictFamBT.terminate()
 
         sensors = []
         vals = []
