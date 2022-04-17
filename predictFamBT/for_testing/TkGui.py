@@ -166,7 +166,7 @@ def main1():
 
     def call_HM():
         global ab
-        arduino = serial.Serial('COM4', 9600)  # open com port (com4 or com5)
+        arduino = serial.Serial('COM5', 9600)  # open com port (com4 or com5)
         if ab == 2:
             count = 1
             #vals= random.randint(5, size=(13))
@@ -206,7 +206,7 @@ def main1():
         heat_map = FigureCanvasTkAgg(fig_HM, center)
         heat_map.get_tk_widget().grid(row=1, column=1)  # A tk.DrawingArea.
         heat_map.draw()
-        root.after(20000, call_HM)
+        root.after(10000, call_HM)
     call_HM()
     # Create an object of tkinter ImageTk
     # badge = Image.open("badgeIcon.jpg")

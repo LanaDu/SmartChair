@@ -31,7 +31,7 @@ loop = 0
 while loop != 5:
     arduino = serial.Serial('COM4', 9600) # open com port (com4 or com5)
     sensor, val = read_arduino(arduino) # one sensor value
-    if sensor == ' A1': #get 13 sensor values
+    if sensor == 'A1': #get 13 sensor values
         count = 1
         sensors.append(sensor)
         vals.append(val)
@@ -58,6 +58,7 @@ while loop != 5:
     else:
         sensor, val = read_arduino(arduino)
     arduino.close()
+
 
 # excel export at log out stage
 #print(all_sensors)
