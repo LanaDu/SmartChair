@@ -175,17 +175,17 @@ def main1():
             vals= random.randint(5, size=(13))
             sensors, vals = [], []
             while count < 14:
-                #sensor, val = read_arduino(arduino)
+                sensor, val = read_arduino(arduino)
                 print(sensor)
                 print(' A' +f"{count}")
                 if sensor == ' A' +f"{count}":
-                    #sensor, val = read_arduino(arduino)
+                    sensor, val = read_arduino(arduino)
                     sensors.append(sensor)
                     vals.append(val)
                     count += 1
                 # now have list of sensors and list of vals to put in dataframe
-                # sensors13 = pd.DataFrame(list(zip(sensors, vals)), columns=['Sensor', 'Value'])
-                # all_sensors = all_sensors.append(sensors13)
+                sensors13 = pd.DataFrame(list(zip(sensors, vals)), columns=['Sensor', 'Value'])
+                all_sensors = all_sensors.append(sensors13)
 
             my_predictFamBT = predictFamBT.initialize()
 
