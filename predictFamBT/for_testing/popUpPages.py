@@ -5,25 +5,27 @@ Created on Tue Mar 22 20:36:42 2022
 @author: lanad
 """
 import tkinter as tk
+from tkinter import *
 from PIL import Image, ImageTk
 
 def openBadge():
     badgePage = tk.Toplevel()
     badgePage.title("Badges")
     badgePage.geometry("200x200")
-    topFrame = tk.Frame(badgePage)
-    tk.Label(topFrame, text ="1/5 badges achieved:").grid(column = 0, row =1)
-    #Create an object of tkinter ImageTk
-    badge = Image.open("badgeIcon.jpg")
-    re_badge = badge.resize((50, 50), Image.ANTIALIAS)
-    new_badge = ImageTk.PhotoImage(re_badge)
-    # Create a Label Widget to display the text or Image
-    badgeLabel = tk.Label(badgePage, text="Stood after 30 minutes")
-    badgeLabel.grid(row=1, column=2)
-    badgeLabel = tk.Label(badgePage, image = new_badge)
-    badgeLabel.grid(row=1, column=0)
+    frameBadge = tk.Frame(badgePage)
+    frameBadge.pack()
 
+    bframe= tk.Frame(badgePage)
+    tframe = tk.Frame(badgePage)
+    tframe.pack(side=TOP)
+    bframe.pack( side = TOP)
 
+    tk.Label(tframe, text = "Badges achieved: 1/5").pack(side = TOP)
+    tk.Label(bframe, text="Stood up after 30 minutes").pack(side=TOP)
+    tk.Label(bframe, text="Remained in good posture for 5 minutes").pack(side=TOP)
+    tk.Label(bframe, text="Remained in good posture for 15 minutes").pack(side=TOP)
+    tk.Label(bframe, text="Stood up after 30 minutes 3 times in a row").pack(side=TOP)
+    tk.Label(bframe, text="Stood up after 30 minutes 6 times in a row").pack(side=TOP)
 def openInsights():
     insightsPage = tk.Toplevel()
     insightsPage.title("insights")

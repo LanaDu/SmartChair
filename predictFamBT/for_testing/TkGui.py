@@ -1,5 +1,4 @@
 import popUpPages
-import GUIFunc as fun
 from PIL import ImageTk
 from PIL import Image
 from string import ascii_letters
@@ -8,7 +7,7 @@ from matplotlib.colors import ListedColormap
 import pandas as pd
 import seaborn as sb
 import tkinter as tk
-
+import os
 from datetime import datetime
 import time
 import sys
@@ -24,6 +23,8 @@ global oTime
  #note to self: cant use from tkinter import * AND PIL
 
 def main1():
+    # get the directory path of the current python file
+    my_path = os.path.dirname(__file__)
     global uname
     uname='log in please'
     root = tk.Tk()
@@ -146,7 +147,7 @@ def main1():
     heat_map.draw()
 
     # Create an object of tkinter ImageTk
-    badge = Image.open("badgeIcon.jpg")
+    badge = Image.open(r"C:\Users\lanad\Documents\5th year\Code for smartchair\SmartChair\predictFamBT\for_testing\badgeIcon.jpg")
     re_badge = badge.resize((50, 50), Image.ANTIALIAS)
     new_badge = ImageTk.PhotoImage(re_badge)
     # Create a Label Widget to display the text or Image
@@ -154,8 +155,8 @@ def main1():
                            command=popUpPages.openBadge)
     badgeLabel.grid(row=1, column=7)
 
-    # Create an object of tkinter Imag                                                                          eTk
-    report = Image.open("reportIcon.png")
+    # Create an object of tkinter ImageTk
+    report = Image.open(r"C:\Users\lanad\Documents\5th year\Code for smartchair\SmartChair\predictFamBT\for_testing\reportIcon.png")
     re_report = report.resize((50, 50), Image.ANTIALIAS)
     new_report = ImageTk.PhotoImage(re_report)
     # Create a Label Widget to display the text or Image
@@ -164,7 +165,7 @@ def main1():
     reportLabel.grid(row=1, column=6)
 
     # Create an object of tkinter ImageTk
-    insights = Image.open("insightsIcon.png")
+    insights = Image.open(r"C:\Users\lanad\Documents\5th year\Code for smartchair\SmartChair\predictFamBT\for_testing\insightsIcon.png")
     re_insights = insights.resize((50, 50), Image.ANTIALIAS)
     new_insights = ImageTk.PhotoImage(re_insights)
     # Create a Label Widget to display the text or Image
@@ -185,7 +186,7 @@ def login():
     pwd = password.get()
     # applying empty validation
     if uname == '' or pwd == '':
-        message.set("fill the empty field!!!")
+        message.set("Username and/or password has not been entered")
 
     elif uname == "Tony" and pwd == "p":
         message.set("Login success")
@@ -195,7 +196,7 @@ def login():
 
 
     else:
-        message.set("Wrong username or password!!!")
+        message.set("Invalid username and/or password")
 
 
 # defining loginform function
