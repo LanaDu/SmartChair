@@ -55,6 +55,7 @@ def main1():
 
     # create all of the main containers
     top_frame = tk.Frame(root, bg="#00796B", width=width, height=50, pady=3)
+
     center = tk.Frame(root, bg='white', width=width, height=40, padx=3, pady=3)
     btm_frame = tk.Frame(root, bg='white', width=width, height=45, pady=3)
 
@@ -75,15 +76,18 @@ def main1():
 
     # hello user
     hello = tk.Label(top_frame,
+
                      bg="#00796B", fg="white", width=35, height=5, font=10)
     hello.grid(row=0, column=0)
 
     # clock
     clock = tk.Label(top_frame,bg="#00796B", fg="white", width=35, height=5, font=10)
+
     clock.grid(row=0, column=1)
 
 
     # datedisp
+
     date = tk.Label(top_frame, bg="#00796B", fg="white", height=5, width=35, font=10)
     date.grid(row=0, column=3)
 
@@ -101,6 +105,7 @@ def main1():
     # Classification label
     classLab= tk.Label(center,bg="#00796B", fg="white", width=35, height=5, font=19)
     classLab.grid(row=1, column=2)
+
     def tick():
         now = datetime.now()
         if uname == "Tony":
@@ -110,12 +115,14 @@ def main1():
             timeToGo = (30*60)-timeNow
             countdown.configure(text='Time sat down: ' + f"{timeNow//60}" + " minutes and " + f"{timeNow%60}" + " seconds")
             hello.configure(text='Hello, '+ f"{uname}")
+
             if timeNow <(30*60):
                 pie_chart(timeNow, timeToGo)
             elif timeNow>=(30*60):
                 tk.messagebox.showinfo("Stand up")
                 global ab
                 ab=3
+
 
             countdown.configure(text='Time sat down: ' + f"{timeNow//60}" + " minutes and " + f"{timeNow%60}" + " seconds")
             clock.configure(text='Time: '+ f"{now:%H:%M}")
@@ -137,10 +144,12 @@ def main1():
 
         fig = Figure()  # create a figure object
         ax = fig.add_subplot(111)  # add an Axes to the figure
+
         ax.pie(chartVar, startangle =90,radius=1, shadow=False, colors = ['white', '#B2DFDB'] )
         circle = plt.Circle((0, 0), 0.7, color='white')
         ax.add_artist(circle)
         ax.set_title('Stand when the ring disappears',fontsize=19)
+
         chart1 = FigureCanvasTkAgg(fig, center)
         chart1.get_tk_widget().grid(row=1, column=3)
 
@@ -156,6 +165,7 @@ def main1():
         hmTop = sb.heatmap(dataTop, cmap=sb.light_palette("#00796B"),ax=ax[0], annot= TopLabels, fmt='', yticklabels=False, xticklabels=False)
         BotLabels =np.array([['A5', 'A6', 'A7'],['A8', 'A9','A10'],['A11', 'A12','A13']])
         hmBot=sb.heatmap(dataBot, cmap=sb.light_palette("#00796B"), ax=ax[1], annot= BotLabels, fmt='', yticklabels=False, xticklabels=False)
+
         hmBot.set_xlabel('Front of Chair', fontsize=10)
         hmTop.set_ylabel('Right hand side', fontsize=10)
         return f
@@ -242,6 +252,7 @@ def main1():
     # # Create a Label Widget to display the text or Image
     # insightsLabel = tk.Button(center, image=new_insights, command=popUpPages.openInsights)
     # insightsLabel.grid(row=1, column=5)
+
     tick()
     root.mainloop()
 
@@ -287,7 +298,9 @@ def Loginform():
     password = tk.StringVar()
     message = tk.StringVar()
     # Creating layout of login form
+
     tk.Label(login_screen, width="300", text="Please enter details below", bg="#00796B", fg="white").pack()
+
     # Username Label
     tk.Label(login_screen, text="Username * ").place(x=20, y=40)
     # Username textbox
@@ -299,7 +312,10 @@ def Loginform():
     # Label for displaying login status[success/failed]
     tk.Label(login_screen, text="", textvariable=message).place(x=95, y=100)
     # Login button
+
     tk.Button(login_screen, text="Login", width=10, height=1, bg="#B2DFDB", command=login).place(x=105, y=130)
+
+
     #login_screen.mainloop()
 
 main1()
