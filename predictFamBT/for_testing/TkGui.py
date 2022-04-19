@@ -1,6 +1,6 @@
 from __future__ import print_function
 import pandas as pd
-#import predictFamBT
+import predictFamBT
 import matlab
 import popUpPages
 from PIL import ImageTk
@@ -110,9 +110,12 @@ def main1():
             timeToGo = (30*60)-timeNow
             countdown.configure(text='Time sat down: ' + f"{timeNow//60}" + " minutes and " + f"{timeNow%60}" + " seconds")
             hello.configure(text='Hello, '+ f"{uname}")
-            pie_chart(timeNow, timeToGo)
-            if timeNow==(30*60):
+            if timeNow <(30*60):
+                pie_chart(timeNow, timeToGo)
+            elif timeNow>=(30*60):
                 tk.messagebox.showinfo("Stand up")
+                global ab
+                ab=3
 
             countdown.configure(text='Time sat down: ' + f"{timeNow//60}" + " minutes and " + f"{timeNow%60}" + " seconds")
             clock.configure(text='Time: '+ f"{now:%H:%M}")
@@ -172,29 +175,29 @@ def main1():
         arduino = serial.Serial('COM5', 9600)  # open com port (com4 or com5)
         if ab == 2:
             count = 1
-            vals= random.randint(5, size=(13))
+            #vals= random.randint(5, size=(13))
+            #vals = list(vals)
             sensors, vals = [], []
             while count < 14:
-                #sensor, val = read_arduino(arduino)
+                sensor, val = read_arduino(arduino)
                 print(sensor)
                 print(' A' +f"{count}")
                 if sensor == ' A' +f"{count}":
-                    #sensor, val = read_arduino(arduino)
                     sensors.append(sensor)
                     vals.append(val)
                     count += 1
                 # now have list of sensors and list of vals to put in dataframe
-                sensors13 = pd.DataFrame(list(zip(sensors, vals)), columns=['Sensor', 'Value'])
-                all_sensors = all_sensors.append(sensors13)
+                #sensors13 = pd.DataFrame(list(zip(sensors, vals)), columns=['Sensor', 'Value'])
+                #all_sensors = all_sensors.append(sensors13)
 
             my_predictFamBT = predictFamBT.initialize()
 
-            sensorDataIn = matlab.double(vals, size=(1, 13))
+            sensorDataIn = matlab.double(vals, size=(1,13))
             labelOut = my_predictFamBT.predictFamBT(sensorDataIn)
             print(labelOut, sep='\n')
-            if labelOut[0] == "perfect":
+            if labelOut[0] == "Perfect":
                 classLab.configure(text="Posture: good!")
-            elif labelOut[0] == "bad":
+            elif labelOut[0] == "Bad":
                 classLab.configure(text="Posture: bad! Adjust seating position.")
             my_predictFamBT.terminate()
             arduino.close()
