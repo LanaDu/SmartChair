@@ -6,6 +6,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 import seaborn as sb
 from matplotlib.colors import ListedColormap
+import TkGui
 import openpyxl
 
 
@@ -35,22 +36,25 @@ def data_hm(inputs):
 dummy_path = r"C:\Users\conni\OneDrive\Documents\connie\Smart Chair\DummyData.xlsx"
 dummydata = pd.read_excel(dummy_path)
 # test file to export dummy data
-dummy_out = r"C:\Users\conni\OneDrive\Documents\connie\Smart Chair\DummyOutput"
+#dummy_out = r"C:\Users\conni\OneDrive\Documents\connie\Smart Chair\DummyOutput"
 
 # create empty xl file
-writer = pd.ExcelWriter(f'{dummy_out}.xlsx', engine='openpyxl')
+#writer = pd.ExcelWriter(f'{dummy_out}.xlsx', engine='openpyxl')
 
-all_sensors = pd.DataFrame(columns = ['Sensor', 'Value'])
+#all_sensors = pd.DataFrame(columns = ['Sensor', 'Value'])
+
+
 i = 0
 while i != len(dummydata):
     # read 13 sensor values from dummydata
     dummydata_sp = dummydata.iloc[i:i + 13]
     sensors = list(dummydata_sp['Sensor'])
     vals = list(dummydata_sp['Value'])
-    sensors13 = pd.DataFrame(list(zip(sensors, vals)), columns=['Sensor', 'Value'])
-    all_sensors = all_sensors.append(sensors13)
+    #sensors13 = pd.DataFrame(list(zip(sensors, vals)), columns=['Sensor', 'Value'])
+    #all_sensors = all_sensors.append(sensors13)
+
+    # TkGui.main1(vals)
     # export to excel
-    i += 13
 
     my_predictFamBT = predictFamBT.initialize()
 
@@ -60,11 +64,15 @@ while i != len(dummydata):
 
     my_predictFamBT.terminate()
 
-    data = data_hm(vals)
-    # heat map
-    dataBot = data[0]
-    dataTop = data[1]
-    fig_HM = create_HM(dataBot, dataTop)
+    i += 13
+
+
+    #
+    # data = data_hm(vals)
+    # # heat map
+    # dataBot = data[0]
+    # dataTop = data[1]
+    # fig_HM = create_HM(dataBot, dataTop)
 
 
 

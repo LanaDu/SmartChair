@@ -1,8 +1,9 @@
 from __future__ import print_function
 import pandas as pd
-import predictFamBT
+#import predictFamBT
 import matlab
 import serial
+import openpyxl
 import numpy as np
 import matplotlib.pyplot as plt
 import seaborn as sb
@@ -15,6 +16,10 @@ def read_arduino(arduino):
     v = float(v)
 
     return s, v
+dummy_out = r"C:\Users\conni\OneDrive\Documents\connie\Smart Chair\DummyOutput"
+
+#create empty xl file
+writer = pd.ExcelWriter(f'{dummy_out}.xlsx', engine='openpyxl')
 
 sensors = []
 vals = []
@@ -25,7 +30,7 @@ all_sensors = pd.DataFrame(columns = ['Sensor', 'Value'])
 loop = 0
 while loop != 5:
     arduino = serial.Serial('COM4', 9600) # open com port (com4 or com5)
-    sensor, val = read_arduino(arduino)
+    sensor, val = read_arduino(arduino) # one sensor value
     if sensor == 'A1': #get 13 sensor values
         count = 1
         sensors.append(sensor)
@@ -38,13 +43,14 @@ while loop != 5:
         # now have list of sensors and list of vals to put in dataframe
         sensors13 = pd.DataFrame(list(zip(sensors, vals)), columns = ['Sensor', 'Value'])
         all_sensors = all_sensors.append(sensors13)
-        my_predictFamBT = predictFamBT.initialize()
 
-        sensorDataIn = matlab.double(vals, size=(1, 13))
-        labelOut = my_predictFamBT.predictFamBT(sensorDataIn)
-        print(labelOut, sep='\n')
+        #my_predictFamBT = predictFamBT.initialize()
 
-        my_predictFamBT.terminate()
+        #sensorDataIn = matlab.double(vals, size=(1, 13))
+        #labelOut = my_predictFamBT.predictFamBT(sensorDataIn)
+        #print(labelOut, sep='\n')
+
+        #my_predictFamBT.terminate()
 
         sensors = []
         vals = []
@@ -55,4 +61,6 @@ while loop != 5:
 
 
 # excel export at log out stage
-print(all_sensors)
+#print(all_sensors)
+all_sensors.to_excel(writer, index = False)
+writer.save()
