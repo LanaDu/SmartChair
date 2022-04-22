@@ -16,7 +16,8 @@ import matplotlib.pyplot as plt
 from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
 from matplotlib.figure import Figure
 import serial
-
+import os
+os.environ["KMP_DUPLICATE_LIB_OK"]="TRUE"
 global loggedIn
 global uname
 global oTime
@@ -25,7 +26,7 @@ global ab
  #note to self: cant use from tkinter import * AND PIL
 
 def main1():
-    def read_arduino(arduino):
+    def read_arduino(arduino): # function to read arduino serial this will be called later
         arduino_bytes = arduino.readline()  # read line of arduino serial
         arduino_decode = arduino_bytes.decode()
         [s, v] = arduino_decode.split(',')  # isolate sensor name and voltage val
@@ -33,22 +34,22 @@ def main1():
 
         return s, v
 
-    global uname
+    global uname # username variable which is changed when user sucessfully logs in
     uname='log in please'
 
-    global ab
+    global ab #abort variable which will signal when the abort button has been pressed
     ab = 2
 
-    root = tk.Tk()
+    root = tk.Tk() # root for GUI
     root.title('Smart Chair UI')
-    width = root.winfo_screenwidth()
+    width = root.winfo_screenwidth() # find screen width and height for laptop/screen
     print(width)
     height = root.winfo_screenheight()
     print(height)
     root.geometry('{}x{}'.format(width, height))
 
 
-    def abort():
+    def abort(): # this function changes the value of ab
         global ab
         ab = 3
 
@@ -106,20 +107,21 @@ def main1():
     classLab= tk.Label(center,bg="#00796B", fg="white", width=35, height=5, font=19)
     classLab.grid(row=1, column=2)
 
-    def tick():
-        now = datetime.now()
-        if uname == "Tony":
+    def tick(): # tick function used as a counter which will refresh the gui labels every second
+        now = datetime.now() # finds current system dat and time
+        if uname == "Tony": #tony has been selected as the user for tradeshow (otherwise this would be a validated user after successful login)
 
             global oTime
-            timeNow = round(time.time())- oTime
+            timeNow = round(time.time())- oTime # calculate the time difference from login time to now
             timeToGo = (30*60)-timeNow
+            #change the count down label to dsisplay how long user has sat on chair
             countdown.configure(text='Time sat down: ' + f"{timeNow//60}" + " minutes and " + f"{timeNow%60}" + " seconds")
-            hello.configure(text='Hello, '+ f"{uname}")
+            hello.configure(text='Hello, '+ f"{uname}") #personalize welcome label with username
 
             if timeNow <(30*60):
-                pie_chart(timeNow, timeToGo)
+                pie_chart(timeNow, timeToGo) #call function to create a pie chart of user time on chair
             elif timeNow>=(30*60):
-                tk.messagebox.showinfo("Stand up")
+                tk.messagebox.showinfo("Stand up") #after 30 mins send a popup asking user to stand up
                 global ab
                 ab=3
 
@@ -129,16 +131,16 @@ def main1():
             date.configure(text='Date: ' + f"{now:%d/%m/%Y}")
             loginButton.configure(text='log out', command=logout)
             root.after(1000, tick)
-        else:
+        else: #when user is not logged in/ invalid timer is not started
             countdown.configure(text='Time sat down: 0 minutes and 0 seconds')
             clock.configure(text='Time: '+ f"{now:%H:%M}")
             date.configure(text='Date: ' + f"{now:%d/%m/%Y}")
             hello.configure(text='Please log in')
-            loginButton.configure(text = 'log in', command = Loginform)
-            root.after(1000,tick)
+            loginButton.configure(text = 'log in', command = Loginform) #clicking this button will cause the login form to appear
+            root.after(1000,tick) #1000 = 1s
     # pie chart function
 
-    def pie_chart(time_pass, time_lef):
+    def pie_chart(time_pass, time_lef): #function to create donut chart for timer
         chartLabels = ['time passed', 'time left']
         chartVar = [time_pass, time_lef]
 
@@ -171,7 +173,7 @@ def main1():
         return f
 
 
-    def data_hm(inputs):
+    def data_hm(inputs): #sepertaes data into top sensors sheet and bottom
         #inputs=[0.62, 0.34, 3.63, 0.47, 1.73, 1.43, 1.66, 1.89, 1.6, 1.93, 1.16, 0.85, 1.08]
         dataBot = np.array([inputs[4], inputs[5], inputs[6], inputs[7], inputs[8], inputs[9], inputs[10], inputs[11], inputs[12]]).reshape(3,3)
         dataTop = np.array([inputs[0], inputs[1], inputs[2], inputs[3]]).reshape(2,2)
@@ -182,8 +184,8 @@ def main1():
 
     def call_HM():
         global ab
-        arduino = serial.Serial('COM5', 9600)  # open com port (com4 or com5)
-        if ab == 2:
+        arduino = serial.Serial('COM9', 9600)  # open com port (com4 or com5)
+        if ab == 2: #when abort has not been pressed
             count = 1
             #vals= random.randint(5, size=(13))
             #vals = list(vals)
@@ -192,7 +194,7 @@ def main1():
                 sensor, val = read_arduino(arduino)
                 print(sensor)
                 print(' A' +f"{count}")
-                if sensor == ' A' +f"{count}":
+                if sensor == ' A' +f"{count}": #if the sensor being read is the same as count (i.e. ensure readings start at A1)
                     sensors.append(sensor)
                     vals.append(val)
                     count += 1
@@ -205,7 +207,7 @@ def main1():
             sensorDataIn = matlab.double(vals, size=(1,13))
             labelOut = my_predictFamBT.predictFamBT(sensorDataIn)
             print(labelOut, sep='\n')
-            if labelOut[0] == "Perfect":
+            if labelOut[0] == "Perfect": #produce labels from ML output to display on GUI
                 classLab.configure(text="Posture: good!")
             elif labelOut[0] == "Bad":
                 classLab.configure(text="Posture: bad! Adjust seating position.")
@@ -213,9 +215,9 @@ def main1():
             arduino.close()
 
         elif ab==3: #abort
-            vals = np.zeros(13)
+            vals = np.zeros(13) #this will stop the hm from showing any data and set all inputs to 0
             print(vals)
-            arduino.close()
+            arduino.close() #stop reading arduino data
 
         data = data_hm(vals)
         # heat map
@@ -225,8 +227,11 @@ def main1():
         heat_map = FigureCanvasTkAgg(fig_HM, center)
         heat_map.get_tk_widget().grid(row=1, column=1)  # A tk.DrawingArea.
         heat_map.draw()
-        root.after(10000, call_HM)
+        root.after(10000, call_HM) # call the heatmap function every 10 s to allow time forthe sensor values to be collected
     call_HM()
+    #below the buttons are to allow acces to windows for awards, insights etc.
+    #buttons are functional but removed for tradeshow demo as not enough data collected to complete meaningful insights
+
     # Create an object of tkinter ImageTk
     # badge = Image.open("badgeIcon.jpg")
     # re_badge = badge.resize((50, 50), Image.ANTIALIAS)
@@ -266,7 +271,6 @@ def login():
     global uname
     uname = username.get()
     pwd = password.get()
-    # applying empty validation
     if uname == '' or pwd == '':
         message.set("fill the empty field!!!")
 
